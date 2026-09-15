@@ -101,7 +101,7 @@ send_message(session_id, user_text) -> {
 - Transcript lưu đúng, không chứa API key.
 - Commit kỹ thuật riêng có thể đối chiếu.
 
-### Thành viên 3 — [Điền họ tên và MSSV]
+### Thành viên 3 — [Ngô Đinh Minh Nhật - 2A202602569]
 
 **Vai trò:** Frontend/UI
 

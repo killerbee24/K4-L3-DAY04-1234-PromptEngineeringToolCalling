@@ -1,0 +1,16 @@
+{
+  "transcript_id": "v0_gemini_20260915T192312039803",
+  "version": "v0",
+  "artifact_version": "v0+p8ae7a368d8ca+t405c5c4418c0",
+  "prompt_hash": "8ae7a368d8caf1b4ad464ed2523886c13cf3bc5738d76e65b42781d8cbfef796",
+  "tools_hash": "405c5c4418c0f9fc212e94640304ba464c8586403a4e506130ec328522941294",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash",
+  "system_prompt": "D:\\VinAI\\K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\VinAI\\K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "20260915T192312039803",
+  "updated_at": "2026-09-15T19:23:12",
+  "turns": []
+}

@@ -8,60 +8,60 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Ask exactly one follow-up question when required information is missing, ambiguous, or a write action needs confirmation. Use response_type=text for missing IDs, yes_no for confirmation, and choice with options when the user must select from allowed enum values."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question: {type: string, default: "", description: "The one question the user must answer before the assistant can continue."}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Use text for missing asset/employee details, yes_no before creating tickets, and choice for enum selection."}
+        options: {type: array, default: [], items: {type: string}, description: "Required only for response_type=choice; use exact allowed values such as production and staging."}
       required: [question]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Search internal helpdesk knowledge-base articles for how-to, setup, and troubleshooting guidance. Use this for instructions, not for live service status or specific device diagnostics."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
-        top_k: {type: integer, default: 3, description: "Số kết quả"}
+        query: {type: string, default: "", description: "Natural-language search phrase containing the product, symptom, platform, or requested guide."}
+        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Closest topic category. Use email for Outlook/profile issues, wifi for wireless troubleshooting, vpn for VPN setup/issues."}
+        top_k: {type: integer, default: 3, description: "Number of articles to return."}
       required: [query]
 
   - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+    description: "Check live health for a shared IT service and environment. Use for VPN/email/SSO/Wi-Fi/printing service outages or comparisons across production and staging. Do not use for a single asset."
     parameters:
       type: object
       properties:
-        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ"}
-        environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường"}
+        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Shared service to check."}
+        environment: {type: string, enum: [production, staging], default: "production", description: "Use production when stated or unspecified; use staging only when stated; ask clarify for unsupported names such as demo/QA."}
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Inspect one specific internal device or asset by exact asset_id. Use separate calls for multiple assets. Do not guess asset_id when the user says only laptop, desktop, printer, or room without an ID. Never pass employee IDs such as EMP-1003 as asset_id."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        asset_id: {type: string, description: "Exact internal asset ID from the user, normalized uppercase."}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Requested diagnostic area. Use all for general/overall checks, network for Wi-Fi/network, vpn for VPN, security for encryption/compliance, hardware for hardware snapshots, software for app/OS checks."}
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Look up one employee in the internal support directory by exact employee_id. This returns account status and assigned assets, so do not also inspect a device unless the user explicitly requests diagnostics for an asset ID. Ask clarify if the request identifies only a name, department, role, or vague person."
     parameters:
       type: object
       properties:
-        employee_id: {type: string, description: "Mã nhân viên"}
+        employee_id: {type: string, description: "Exact employee ID from the user, such as EMP-1003."}
       required: [employee_id]
 
   - name: format_incident_report
-    description: "Trình bày các kết quả đã có thành báo cáo."
+    description: "Format existing findings into an incident report. Use when findings are already provided in the request or gathered from earlier tool results. Do not call diagnostic/status tools again when the user asks only to format."
     parameters:
       type: object
       properties:
         findings:
           type: array
           default: []
-          description: "Các kết quả đã thu thập"
+          description: "Existing findings to include, preserving source/status when available."
           items:
             type: object
             properties:
@@ -69,8 +69,8 @@ tools:
               detail: {type: string}
               source: {type: string}
               status: {type: string}
-        template: {type: string, enum: [brief, technical, handoff], default: "brief", description: "Mẫu báo cáo"}
-        incident_title: {type: string, default: "IT incident", description: "Tiêu đề"}
+        template: {type: string, enum: [brief, technical, handoff], default: "brief", description: "Report style requested by the user. Use technical for technical report and handoff for handoff report."}
+        incident_title: {type: string, default: "IT incident", description: "User-provided incident title when available."}
       required: [findings, template]
 
   # ---------------- Optional/advanced tools ----------------
@@ -86,7 +86,7 @@ tools:
       required: [manufacturer, model, query_type]
 
   - name: policy
-    description: "Tìm trong chính sách IT nội bộ."
+    description: "Search internal IT policy. Use for rules, approvals, privacy boundaries, ticketing policy, incident response, external tools, or access-control questions."
     parameters:
       type: object
       properties:
@@ -96,12 +96,12 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Create a support ticket only after the user explicitly confirms the exact current summary, priority, and asset_id. If confirmation is missing or the payload changed after confirmation, use clarify with response_type=yes_no instead. Ticket details can be inferred from the user's described issue, device, service, and priority."
     parameters:
       type: object
       properties:
-        summary: {type: string, default: "", description: "Tóm tắt sự cố"}
-        priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
-        asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
-        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
+        summary: {type: string, default: "", description: "Ticket summary without passwords, tokens, MFA codes, API keys, or other secrets."}
+        priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Ticket priority requested or confirmed by the user."}
+        asset_id: {type: string, default: "", description: "Exact asset ID if the ticket is about a device."}
+        confirmed: {type: boolean, default: false, description: "Set true only when the user explicitly confirmed this exact current ticket payload."}
       required: [summary]
