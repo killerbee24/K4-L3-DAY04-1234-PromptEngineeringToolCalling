@@ -38,7 +38,7 @@ Mỗi thành viên mở đúng bài Day04 trên VLearn, nộp URL trang gốc c�
 
 ## Kiểm tra trước khi nộp
 
-- [ ] Tên repo, TEAM và INDIVIDUAL đúng quy tắc.
-- [ ] Có đủ run, report, UI/transcript và 10 case nhóm.
-- [ ] Không sửa bộ câu cố định, không có key hoặc dữ liệu thật.
-- [ ] Repo mở được cho người chấm và từng thành viên đã nộp cùng URL trên VLearn.
+- [X] Tên repo, TEAM và INDIVIDUAL đúng quy tắc.
+- [X] Có đủ run, report, UI/transcript và 10 case nhóm.
+- [X] Không sửa bộ câu cố định, không có key hoặc dữ liệu thật.
+- [X] Repo mở được cho người chấm và từng thành viên đã nộp cùng URL trên VLearn.

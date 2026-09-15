@@ -4,10 +4,10 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm: Day04 K4-L3B IT Helpdesk.
+- Tên nhóm: 1234.
 - Người đại diện / MSSV: Vũ Văn Điền / 2A202602418.
-- Tên repo: `K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling`
-- URL repo, nhánh nộp, commit chốt: `https://github.com/killerbee24/K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling`, branch `main`, commit chốt là HEAD của branch `main` khi nộp.
+- Tên repo: `K4-L3-DAY04-1234-PromptEngineeringToolCalling`
+- URL repo, nhánh nộp, commit chốt: `https://github.com/killerbee24/K4-L3-DAY04-1234-PromptEngineeringToolCalling`, branch `main`, commit chốt là HEAD của branch `main` khi nộp.
 - Deadline áp dụng và link thông báo đổi hạn nếu có: Theo `SUBMISSION.md`.
 
 ## Thành viên
@@ -58,5 +58,5 @@
 - Phần việc và file/commit/PR: Phụ trách Frontend/UI; xây giao diện chat Streamlit trong `starter_v0/app.py`, hiển thị provider/model/artifact version, lịch sử nhiều lượt, tool call theo vòng, arguments, result/error, trạng thái chờ người dùng, nút phiên mới và tải transcript JSON. Commit kỹ thuật: `c6cc594` và phần UI polish trong commit tích hợp cuối.
 - Quyết định, khó khăn và cách xử lý: UI dùng `HelpdeskAppService` để hiển thị trace thật từ backend thay vì dựng dữ liệu minh họa; tool error được render trực tiếp, transcript chỉ chứa metadata và hội thoại, không hiển thị API key.
 - Điều đã học: Một UI demo agent tốt phải cho người xem thấy lý do agent hành động: gọi tool nào, input gì, output ra sao, đang chờ xác nhận hay đã đủ điều kiện thực hiện.
-- AI/công cụ đã dùng và cách kiểm tra: Dùng Codex hỗ trợ rà rubric UI, chỉnh giao diện và kiểm tra bằng `py_compile`, unit test `tests.test_app_service`, Streamlit local health check và transcript demo trong `starter_v0/transcripts/`.
+- AI/công cụ đã dùng và cách kiểm tra: Rà rubric UI, chỉnh giao diện và kiểm tra bằng `py_compile`, unit test `tests.test_app_service`, Streamlit local health check và transcript demo trong `starter_v0/transcripts/`.
 - Thời điểm đã tự nộp URL repo chung trên VLearn: Cập nhật sau khi tự nộp URL repo chung.

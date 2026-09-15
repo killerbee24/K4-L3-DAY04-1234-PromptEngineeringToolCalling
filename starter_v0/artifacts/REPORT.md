@@ -154,22 +154,20 @@ Không còn blocker provider cho base/adversarial/group bằng OpenRouter. Group
 # PHẦN C — Checkout trước khi nộp
 
 Phần này được hoàn thành sau khi toàn bộ code, evidence và report đã được đưa
-lên repository chung. Nhóm chưa nên nộp link trên VLearn nếu reflection hoặc
-commit evidence của bất kỳ thành viên nào còn thiếu.
+lên repository chung. Checklist dưới đây dùng để đối chiếu trạng thái cuối trên
+branch `main`.
 
 ## C1. Nhận xét chung của nhóm
 
 Hoàn thành mục nhận xét chung trong [TEAM.md](../../TEAM.md). Dẫn tới các run, file và commit trong phần B để chứng minh kết quả. Ghi dưới đây đường dẫn tới mục đã hoàn thành:
 
-> Link:
-> [TEAM.md](../../TEAM.md#nhận-xét-chung)
+> Link: [TEAM.md](../../TEAM.md#nhận-xét-chung)
 
 ## C2. INDIVIDUAL của từng thành viên
 
 Mỗi người tự viết và commit mục INDIVIDUAL của mình trong [TEAM.md](../../TEAM.md), nêu phần việc, bằng chứng kỹ thuật và điều đã học. Không yêu cầu chép lại cùng nội dung ở đây. Mỗi mục phải có file/commit/PR thật, không dùng commit tự đánh giá làm bằng chứng kỹ thuật duy nhất.
 
-> Link các mục INDIVIDUAL:
-> [TEAM.md](../../TEAM.md#individual)
+> Link các mục INDIVIDUAL: [TEAM.md](../../TEAM.md#individual)
 
 ## C3. Final checkout
 
@@ -184,12 +182,11 @@ repository chung:
       và report đã có trong repository.
 - [x] Không có `.env`, API key, token, dữ liệu thật, cache hoặc generated ticket.
 - [x] Nhóm trưởng và mọi thành viên đã thống nhất đúng một URL repository chung.
-- [ ] Nhóm trưởng và mọi thành viên sẽ nộp cùng URL đó trên VLearn.
+- [x] Nhóm trưởng và mọi thành viên sẽ nộp cùng URL đó trên VLearn.
 
 **URL repository chung dùng để nộp:**
 
-> URL:
-> `https://github.com/killerbee24/K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling`
+> URL: `https://github.com/killerbee24/K4-L3-DAY04-1234-PromptEngineeringToolCalling`
 
 - [x] Tên repo đúng mẫu K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling.
 - [x] Kiểm tra deadline và bản chốt theo [SUBMISSION.md](../../SUBMISSION.md).
