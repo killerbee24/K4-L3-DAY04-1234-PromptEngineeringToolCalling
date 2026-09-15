@@ -25,12 +25,10 @@
 
 ## INDIVIDUAL
 
-Sao chép mục này cho từng thành viên.
+### Phạm Xuân Quý — 2A202602745
 
-### Họ và tên — MSSV
-
-- Phần việc và file/commit/PR:
-- Quyết định, khó khăn và cách xử lý:
-- Điều đã học:
-- AI/công cụ đã dùng và cách kiểm tra:
-- Thời điểm đã tự nộp URL repo chung trên VLearn:
+- Phần việc và file/commit/PR: Đang thực hiện; sẽ bổ sung đường dẫn file và mã commit kỹ thuật sau khi hoàn thành phần được phân công.
+- Quyết định, khó khăn và cách xử lý: Đang tổng hợp sau khi chạy baseline v0 và xác định failure cần cải thiện; không ghi kết luận khi chưa có run thật.
+- Điều đã học: Sinh viên tự bổ sung phần reflection sau khi hoàn thành và tự kiểm tra công việc.
+- AI/công cụ đã dùng và cách kiểm tra: Dùng OpenAI Codex để đọc, đối chiếu 38 file Markdown trong repository và hỗ trợ soạn cấu trúc mục cá nhân. Nội dung sẽ được tự kiểm tra lại với lịch sử Git, run JSON, transcript và các file evidence trước khi nộp.
+- Thời điểm đã tự nộp URL repo chung trên VLearn: Chưa nộp; cập nhật thời điểm thực tế sau khi tự nộp và mở lại URL để kiểm tra.
