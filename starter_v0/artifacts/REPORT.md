@@ -50,16 +50,20 @@ total_cases`, và tool result error đã được review thủ công.
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
 |---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
-| v1 |  |  |  |  |  |  |
-| v2 |  |  |  |  |  |  |
-| v3 |  |  |  |  |  |  |
+| v0 | baseline | Starter prompt/tool declarations expose routing and boundary gaps once provider errors are removed | valid base run | 0/30 measured due provider quota | pending rerun | `runs/v0_B_base_gemini_20260915T191837535514.json` |
+| v1 | Add prerequisite and confirmation rules | Not guessing IDs/environments and confirming write actions should reduce missing-info and boundary failures | base accuracy | pending valid v0 | pending valid v1 | pending |
+| v2 | Improve tool descriptions and argument conventions | Clearer tool descriptions should reduce wrong tool, wrong argument, and unnecessary tool failures | base accuracy | pending valid v1 | pending valid v2 | pending |
+| v3 | Add multi-turn latest-intent, correction, cancellation, parallel-call rules, and final employee-ID/ticket-confirmation guards | Multi-turn and multi-tool cases should improve because stale context is suppressed, independent checks are split, and write actions stop at confirmation | base accuracy | 0.9333 | 1.0 | `runs/v3_B_base_openrouter_20260915T192723548461.json` |
 
 ## B2. Failure analysis
 
 | Case ID | Failure type | Actual calls | What failed | Fix |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| Shared service status cases | wrong_tool | pending valid v0 run | Assistant can confuse shared service status with device inspection or KB search | Add explicit routing rule: VPN/email/SSO/Wi-Fi/printing health uses `check_service_status`; specific assets use `inspect_device` |
+| Device/user lookup cases with missing IDs | missing_info | pending valid v0 run | Assistant may infer a laptop, employee, or environment not explicitly provided | Add prerequisite rule: ask `clarify` for missing asset ID, employee ID, or unsupported environment |
+| Ticket creation requests | wrong_boundary | pending valid v0 run | Ticket creation is a write action and may happen before exact user confirmation | Add confirmation boundary: ask yes/no before `create_ticket`; invalidate confirmation if payload changes |
+| Multi-turn correction/cancellation cases | wrong_tool / wrong_arg_value / unnecessary_tool | pending valid v0 run | Earlier turns can leak into latest action, causing stale tool calls or stale arguments | Add latest-intent-wins rule, correction precedence, and cancellation stop rule |
+| Multi-source requests | wrong_tool | pending valid v0 run | Assistant may call only one tool when the latest request asks for multiple independent checks | Add rule to call separate tools for separate services, environments, assets, or users |
 
 ## B3. Team eval cases
 

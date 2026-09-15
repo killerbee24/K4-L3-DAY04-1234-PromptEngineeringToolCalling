@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -270,6 +271,7 @@ def main() -> None:
     parser.add_argument("--tools", type=Path, default=ARTIFACTS_DIR / "tools.yaml")
     parser.add_argument("--eval-cases", type=Path, default=DATA_DIR / "eval_base.json")
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "runs")
+    parser.add_argument("--request-delay", type=float, default=0.0, help="Sleep seconds after each case to avoid provider rate limits.")
     args = parser.parse_args()
 
     system_prompt = args.system_prompt.read_text(encoding="utf-8")
@@ -321,6 +323,8 @@ def main() -> None:
             "result": result,
             "tool_results": tool_results,
         })
+        if args.request_delay > 0:
+            time.sleep(args.request_delay)
 
     summary = summarize(results)
     args.runs_dir.mkdir(parents=True, exist_ok=True)
