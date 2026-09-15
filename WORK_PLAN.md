@@ -141,7 +141,7 @@ streamlit run app.py
 - Có demo hội thoại bình thường, thiếu thông tin, nhiều lượt và tạo ticket sau xác nhận.
 - Tool call, input, result/error và version đều xuất hiện trên UI.
 
-### Thành viên 4 — [Điền họ tên và MSSV]
+### Thành viên 4 — Đinh Văn Bình
 
 **Vai trò:** Evaluation, Safety & Report
 

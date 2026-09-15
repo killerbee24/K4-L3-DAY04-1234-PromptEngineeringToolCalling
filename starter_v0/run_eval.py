@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import time
 from datetime import datetime
@@ -272,6 +273,7 @@ def main() -> None:
     parser.add_argument("--eval-cases", type=Path, default=DATA_DIR / "eval_base.json")
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "runs")
     parser.add_argument("--request-delay", type=float, default=0.0, help="Sleep seconds after each case to avoid provider rate limits.")
+    parser.add_argument("--dry-run-tickets", action="store_true", help="Prevent create_ticket from writing ticket files during eval.")
     args = parser.parse_args()
 
     system_prompt = args.system_prompt.read_text(encoding="utf-8")
@@ -289,6 +291,8 @@ def main() -> None:
 
     results: list[dict[str, Any]] = []
     for case in cases:
+        if args.suite == "adversarial" or args.dry_run_tickets:
+            os.environ["DAY04_DRY_RUN_TICKETS"] = "1"
         print(f"Running {case['id']}...", flush=True)
         agent = HelpdeskAgent(provider, system_prompt=system_prompt, tools=openai_tools, model=args.model)
         try:

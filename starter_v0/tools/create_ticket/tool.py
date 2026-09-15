@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 from datetime import datetime, timezone
 from typing import Any
@@ -51,6 +52,16 @@ def create_ticket(
             "tool": "create_ticket",
             "status": "needs_confirmation",
             "message": "Create the ticket only after explicit user confirmation.",
+        }
+    if os.getenv("DAY04_DRY_RUN_TICKETS") == "1":
+        now = datetime.now(timezone.utc)
+        seed = f"dry-run|{now.isoformat()}|{normalized_summary}|{normalized_priority}|{normalized_asset}"
+        ticket_id = "DRY-" + hashlib.sha256(seed.encode("utf-8")).hexdigest()[:8].upper()
+        return {
+            "tool": "create_ticket",
+            "status": "dry_run",
+            "ticket_id": ticket_id,
+            "message": "Dry run only; no ticket file was written.",
         }
     try:
         now = datetime.now(timezone.utc)
