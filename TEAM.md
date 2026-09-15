@@ -14,7 +14,7 @@
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| Vũ Văn Điền | 2A202602418 | KillerBee244 | Prompt Engineering & Experiment Lead: phân tích v0, cải tiến v1-v3, chạy base/group/adversarial, ghi version log và report evidence | `starter_v0/artifacts/system_prompt.md`, `starter_v0/artifacts/tools.yaml`, `starter_v0/artifacts/version_log.csv`, `starter_v0/runs/`; commits `c79a568`, `f48b383` |
+| Vũ Văn Điền | 2A202602418 | killerbee24 | Prompt Engineering & Experiment Lead: phân tích v0, cải tiến v1-v3, chạy base/group/adversarial, ghi version log và report evidence | `starter_v0/artifacts/system_prompt.md`, `starter_v0/artifacts/tools.yaml`, `starter_v0/artifacts/version_log.csv`, `starter_v0/runs/`; commits `c79a568`, `f48b383` |
 | Đinh Văn Bình | 2A202602830 | binhdinhvan | Evaluation, Safety & Report: viết eval group, chuẩn bị report, phân tích adversarial và kiểm tra safety | `starter_v0/data/eval_group.json`, `starter_v0/artifacts/REPORT.md`; commit `fb17324` |
 | Phạm Xuân Quý | 2A202602745 | quycute2003 | Backend integration & Bonus tools: service layer, unit tests, transcript/eval bonus, three read-only tools | `starter_v0/app_service.py`, `starter_v0/tests/`, `starter_v0/tools/`, `starter_v0/data/eval_bonus.json`; commit `b413f4f` |
 | Ngô Đinh Minh Nhật | 2A202602569 | minhnhatuet | Frontend/UI: Streamlit chat UI, provider/model/version display, tool trace, transcript download, demo transcripts | `starter_v0/app.py`, `starter_v0/requirements.txt`, `starter_v0/transcripts/`; commit `c6cc594` |
