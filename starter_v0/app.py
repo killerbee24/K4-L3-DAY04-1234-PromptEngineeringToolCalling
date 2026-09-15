@@ -2,32 +2,16 @@ from __future__ import annotations
 
 import json
 from datetime import datetime
-from pathlib import Path
 from typing import Any
 
 import streamlit as st
 
-from chat import (
-    json_text,
-    now_iso,
-    run_model_tool_loop,
-    safe_slug,
-    trim_history,
-    write_transcript,
-)
-from env_loader import load_lab_env
+from app_service import HelpdeskAppService
+from chat import json_text, now_iso, safe_slug
 from providers import make_provider
-from tools import load_tool_declarations, to_openai_tools
-from versioning import artifact_version_dict, build_artifact_version
 
 
-ROOT = Path(__file__).parent
-ARTIFACTS_DIR = ROOT / "artifacts"
-TRANSCRIPTS_DIR = ROOT / "transcripts"
-SYSTEM_PROMPT_PATH = ARTIFACTS_DIR / "system_prompt.md"
-TOOLS_PATH = ARTIFACTS_DIR / "tools.yaml"
-
-PROVIDERS = ["gemini", "openrouter", "openai", "anthropic"]
+PROVIDERS = ["openai", "openrouter", "gemini", "anthropic"]
 
 
 def init_session() -> None:
@@ -36,7 +20,9 @@ def init_session() -> None:
     if "turns" not in st.session_state:
         st.session_state.turns = []
     if "transcript_id" not in st.session_state:
-        st.session_state.transcript_id = new_transcript_id("v0", "gemini")
+        st.session_state.transcript_id = new_transcript_id("v3_bonus", "openai")
+    if "transcript_created_at" not in st.session_state:
+        st.session_state.transcript_created_at = now_iso()
     if "last_config" not in st.session_state:
         st.session_state.last_config = None
 
@@ -50,35 +36,7 @@ def reset_chat(version: str, provider: str) -> None:
     st.session_state.chat_history = []
     st.session_state.turns = []
     st.session_state.transcript_id = new_transcript_id(version, provider)
-
-
-def current_transcript(
-    *,
-    artifact_version: Any,
-    provider: str,
-    model: str | None,
-    history_window: int,
-    max_tool_rounds: int,
-) -> dict[str, Any]:
-    return {
-        "transcript_id": st.session_state.transcript_id,
-        **artifact_version_dict(artifact_version),
-        "provider": provider,
-        "model": model,
-        "system_prompt": str(SYSTEM_PROMPT_PATH),
-        "tools": str(TOOLS_PATH),
-        "history_window": history_window,
-        "max_tool_rounds": max_tool_rounds,
-        "created_at": st.session_state.transcript_id.rsplit("_", 1)[-1],
-        "updated_at": now_iso(),
-        "turns": st.session_state.turns,
-    }
-
-
-def save_transcript(transcript: dict[str, Any]) -> Path:
-    path = TRANSCRIPTS_DIR / f"{st.session_state.transcript_id}.transcript.json"
-    write_transcript(path, transcript)
-    return path
+    st.session_state.transcript_created_at = now_iso()
 
 
 def render_tool_rounds(rounds: list[dict[str, Any]]) -> None:
@@ -127,6 +85,8 @@ def render_turn(turn: dict[str, Any]) -> None:
         elif status == "waiting_for_user":
             st.warning("Waiting for user input or confirmation.")
             st.write(turn.get("assistant_text") or "")
+        elif status == "input_rejected":
+            st.error(turn.get("assistant_text") or "Sensitive input was rejected.")
         elif status == "max_tool_rounds":
             st.warning(turn.get("assistant_text") or "Stopped after max tool rounds.")
         else:
@@ -136,7 +96,6 @@ def render_turn(turn: dict[str, Any]) -> None:
 
 def main() -> None:
     st.set_page_config(page_title="IT Helpdesk Agent", page_icon="IT", layout="wide")
-    load_lab_env(ROOT)
     init_session()
 
     st.title("IT Helpdesk Agent")
@@ -144,15 +103,22 @@ def main() -> None:
     with st.sidebar:
         st.header("Runtime")
         provider_name = st.selectbox("Provider", PROVIDERS, index=0)
-        provider = make_provider(provider_name)
-        default_model = getattr(provider, "default_model", None)
+        provider_preview = make_provider(provider_name)
+        default_model = getattr(provider_preview, "default_model", None)
         model_input = st.text_input("Model", value=default_model or "")
         model = model_input.strip() or None
-        version = st.text_input("Version label", value="v0")
+        version = st.text_input("Version label", value="v3_bonus")
         history_window = st.number_input("History window", min_value=0, max_value=20, value=5)
         max_tool_rounds = st.number_input("Max tool rounds", min_value=1, max_value=8, value=4)
 
-        artifact_version = build_artifact_version(version, SYSTEM_PROMPT_PATH, TOOLS_PATH)
+        service = HelpdeskAppService(
+            provider_name=provider_name,
+            version=version,
+            model=model,
+            history_window=int(history_window),
+            max_tool_rounds=int(max_tool_rounds),
+        )
+        artifact_version = service.artifact_version
         st.divider()
         st.caption("Artifact version")
         st.code(artifact_version.artifact_version)
@@ -172,16 +138,13 @@ def main() -> None:
             reset_chat(version, provider_name)
             st.rerun()
 
-    tool_declarations = load_tool_declarations(TOOLS_PATH)
-    openai_tools = to_openai_tools(tool_declarations)
-    transcript = current_transcript(
-        artifact_version=artifact_version,
-        provider=provider_name,
-        model=model,
-        history_window=int(history_window),
-        max_tool_rounds=int(max_tool_rounds),
+    transcript = service.build_transcript(
+        transcript_id=st.session_state.transcript_id,
+        created_at=st.session_state.transcript_created_at,
+        updated_at=now_iso(),
+        turns=st.session_state.turns,
     )
-    transcript_path = save_transcript(transcript)
+    transcript_path = service.transcript_path(st.session_state.transcript_id)
 
     left, right = st.columns([2, 1])
     with right:
@@ -189,6 +152,7 @@ def main() -> None:
         st.write(f"Provider: `{provider_name}`")
         st.write(f"Model: `{model or default_model or 'default'}`")
         st.write(f"Transcript: `{transcript_path.name}`")
+        st.caption("Không nhập password, API key, token, MFA/OTP hoặc recovery code.")
         st.download_button(
             "Download transcript JSON",
             data=json.dumps(transcript, ensure_ascii=False, indent=2, default=str),
@@ -212,11 +176,6 @@ def main() -> None:
         user_text = st.chat_input("Type an IT helpdesk request...")
         if user_text:
             turn_index = len(st.session_state.turns) + 1
-            messages = [
-                {"role": "system", "content": SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")},
-                *trim_history(st.session_state.chat_history, int(history_window)),
-                {"role": "user", "content": user_text},
-            ]
             turn_record: dict[str, Any] = {
                 "turn_index": turn_index,
                 "started_at": now_iso(),
@@ -229,17 +188,14 @@ def main() -> None:
 
             with st.spinner("Calling model and tools..."):
                 try:
-                    result = run_model_tool_loop(
-                        provider=provider,
-                        messages=messages,
-                        tools=openai_tools,
-                        model=model,
-                        max_tool_rounds=int(max_tool_rounds),
+                    result = service.send_message(
+                        user_text=user_text,
+                        history=st.session_state.chat_history,
                     )
+                    history_messages = result.pop("history_messages", [])
+                    turn_record["user"] = result.pop("display_user_text", user_text)
                     turn_record.update(result)
-                    assistant_text = result.get("assistant_text", "")
-                    st.session_state.chat_history.append({"role": "user", "content": user_text})
-                    st.session_state.chat_history.append({"role": "assistant", "content": assistant_text})
+                    st.session_state.chat_history.extend(history_messages)
                 except Exception as exc:
                     turn_record.update({
                         "status": "provider_error",
@@ -248,14 +204,13 @@ def main() -> None:
 
             turn_record["ended_at"] = now_iso()
             st.session_state.turns.append(turn_record)
-            transcript = current_transcript(
-                artifact_version=artifact_version,
-                provider=provider_name,
-                model=model,
-                history_window=int(history_window),
-                max_tool_rounds=int(max_tool_rounds),
+            transcript = service.build_transcript(
+                transcript_id=st.session_state.transcript_id,
+                created_at=st.session_state.transcript_created_at,
+                updated_at=now_iso(),
+                turns=st.session_state.turns,
             )
-            save_transcript(transcript)
+            service.save_transcript(transcript)
             st.rerun()
 
 

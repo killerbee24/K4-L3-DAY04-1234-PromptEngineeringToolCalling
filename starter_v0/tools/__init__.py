@@ -6,11 +6,14 @@ from typing import Any
 import yaml
 
 from .clarify.tool import ask_user
+from .check_maintenance_window.tool import check_maintenance_window
 from .check_service_status.tool import check_service_status
+from .check_software_approval.tool import check_software_approval
 from .create_ticket.tool import create_ticket
 from .format_incident_report.tool import format_incident_report
 from .inspect_device.tool import inspect_device
 from .lookup_user.tool import lookup_user
+from .lookup_ticket_status.tool import lookup_ticket_status
 from .policy.tool import search_company_policy
 from .search_kb.tool import search_kb
 from .search_device_info.tool import search_device_info
@@ -22,11 +25,14 @@ from .search_device_info.tool import search_device_info
 # this registry and tools.yaml, then test it with team-authored cases.
 TOOL_FUNCTIONS = {
     "clarify": ask_user,
+    "check_maintenance_window": check_maintenance_window,
     "search_kb": search_kb,
     "search_device_info": search_device_info,
     "check_service_status": check_service_status,
+    "check_software_approval": check_software_approval,
     "inspect_device": inspect_device,
     "lookup_user": lookup_user,
+    "lookup_ticket_status": lookup_ticket_status,
     "format_incident_report": format_incident_report,
     "policy": search_company_policy,
     "create_ticket": create_ticket,

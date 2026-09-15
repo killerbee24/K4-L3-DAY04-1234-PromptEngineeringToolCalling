@@ -1,0 +1,60 @@
+{
+  "catalog_version": "2026.09",
+  "snapshot_at": "2026-09-15T09:00:00+07:00",
+  "products": [
+    {
+      "name": "Cisco Secure Client",
+      "aliases": ["Cisco AnyConnect", "VPN client"],
+      "variants": [
+        {
+          "operating_system": "Windows 11",
+          "approved_versions": ["5.2.1"],
+          "upgrade_from": ["5.1.8", "5.1.9"],
+          "recommendation": "Upgrade through the approved software portal before the next VPN certificate renewal."
+        },
+        {
+          "operating_system": "macOS 15",
+          "approved_versions": ["5.2.1"],
+          "upgrade_from": ["5.1.8"],
+          "recommendation": "Upgrade through the approved software portal; do not remove the current certificate."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft Outlook",
+      "aliases": ["Outlook"],
+      "variants": [
+        {
+          "operating_system": "Windows 11",
+          "approved_versions": ["2408", "2409"],
+          "upgrade_from": ["2406", "2407"],
+          "recommendation": "Update Microsoft 365 Apps through Company Portal."
+        },
+        {
+          "operating_system": "macOS 15",
+          "approved_versions": ["16.89", "16.90"],
+          "upgrade_from": ["16.87", "16.88"],
+          "recommendation": "Update Outlook through the managed Microsoft AutoUpdate channel."
+        }
+      ]
+    },
+    {
+      "name": "Google Chrome",
+      "aliases": ["Chrome"],
+      "variants": [
+        {
+          "operating_system": "Windows 11",
+          "approved_versions": ["140.0"],
+          "upgrade_from": ["138.0", "139.0"],
+          "recommendation": "Use the managed browser update policy; do not install an unmanaged build."
+        },
+        {
+          "operating_system": "macOS 15",
+          "approved_versions": ["140.0"],
+          "upgrade_from": ["139.0"],
+          "recommendation": "Use the managed browser update policy; do not install an unmanaged build."
+        }
+      ]
+    }
+  ]
+}

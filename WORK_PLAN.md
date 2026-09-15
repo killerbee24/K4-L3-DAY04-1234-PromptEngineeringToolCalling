@@ -62,7 +62,11 @@ Baseline đã chạy bằng OpenAI:
 - `starter_v0/helpdesk_data/approved_software.json`
 - `starter_v0/tools/check_software_approval/TOOL.md`
 - `starter_v0/tools/check_software_approval/tool.py`
-- `starter_v0/tests/test_check_software_approval.py`
+- `starter_v0/helpdesk_data/ticket_status.json`
+- `starter_v0/tools/lookup_ticket_status/`
+- `starter_v0/helpdesk_data/maintenance_windows.json`
+- `starter_v0/tools/check_maintenance_window/`
+- `starter_v0/tests/test_bonus_tools.py`
 - Tài liệu chạy backend hoặc phần backend trong README của UI
 
 **Công việc:**
@@ -78,7 +82,7 @@ Baseline đã chạy bằng OpenAI:
 4. Lưu transcript JSON thật sau mỗi lượt chat.
 5. Thêm kiểm thử cho session, history, trạng thái chờ xác nhận và cấu trúc transcript.
 6. Hỗ trợ frontend tích hợp qua interface đã thống nhất.
-7. Sau khi backend cơ bản ổn định, xây tool mở rộng `check_software_approval` cùng dữ liệu giả lập và smoke test.
+7. Sau khi backend cơ bản ổn định, xây ba tool mở rộng read-only cùng dữ liệu giả lập và smoke test.
 
 **Interface thống nhất với frontend:**
 
@@ -246,11 +250,17 @@ Không thêm toàn bộ repository bằng `git add .` trước khi kiểm tra `g
 
 Frontend và backend phục vụ yêu cầu UI bắt buộc nên không tự động được tính bonus. Chỉ làm bonus sau khi phần chung ổn định.
 
-Tool bonus đã chọn: `check_software_approval` — kiểm tra một tên phần mềm và phiên bản có nằm trong danh mục giả lập được phê duyệt hay không. Đây là chức năng mới ngoài luồng Helpdesk cơ bản đã chốt gồm kiểm tra trạng thái, chẩn đoán thiết bị, tìm hướng dẫn và tạo ticket.
+Các tool bonus đã triển khai:
+
+- `check_software_approval`: kiểm tra một tên phần mềm và phiên bản có nằm trong catalog giả lập được phê duyệt hay không.
+- `lookup_ticket_status`: tra cứu read-only trạng thái ticket giả lập.
+- `check_maintenance_window`: tra cứu lịch bảo trì giả lập và phân biệt với trạng thái dịch vụ hiện tại.
+
+Đây là các chức năng mới ngoài luồng Helpdesk cơ bản đã chốt gồm kiểm tra trạng thái, chẩn đoán thiết bị, tìm hướng dẫn và tạo ticket.
 
 Phân công tool mở rộng:
 
-- Phạm Xuân Quý: xây dữ liệu, implementation, `TOOL.md` và unit/smoke test.
+- Phạm Xuân Quý: xây dữ liệu, implementation, `TOOL.md` và unit/smoke test cho ba tool.
 - Vũ Văn Diện: tích hợp declaration vào `artifacts/tools.yaml` sau khi v3 core đã được chốt, tránh làm thay đổi thí nghiệm base giữa chừng.
 - Thành viên 3: không hard-code tên tool; UI hiển thị trace của tool mở rộng qua cơ chế tool event chung.
 - Thành viên 4: viết bộ eval bonus riêng, kiểm tra safety và bổ sung evidence vào mục B5 của report.

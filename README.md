@@ -77,6 +77,44 @@ python run_eval.py --provider openrouter --version v0 --suite base --eval-cases 
 
 Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
 
+## Chạy UI chat
+
+UI Streamlit dùng chung backend agent loop, tool registry và transcript format với CLI. Sau khi đã cài dependency và điền API key trong `starter_v0/.env`, chạy:
+
+```powershell
+cd starter_v0
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
+```
+
+Trong sidebar, chọn provider/model và version artifact cần demo. Cấu hình mặc định của nhóm là `openai`, `gpt-4o-mini` và `v3_bonus`. UI hiển thị từng tool call, input, result/error, trạng thái chờ người dùng và artifact hash; transcript được lưu trong `starter_v0/transcripts/`.
+
+Chạy smoke test backend trước khi demo:
+
+```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+Chỉ dùng dữ liệu giả lập trong UI. Không nhập password, API key, token, MFA/OTP hoặc recovery code và không commit transcript chưa được kiểm tra.
+
+## Tool mở rộng của nhóm
+
+Artifact `v3_bonus` có thêm ba tool read-only dùng dữ liệu giả lập:
+
+- `check_software_approval`: kiểm tra phần mềm và phiên bản được phê duyệt theo hệ điều hành.
+- `lookup_ticket_status`: tra cứu trạng thái ticket bằng ticket ID.
+- `check_maintenance_window`: tra lịch bảo trì theo dịch vụ và môi trường.
+
+Chạy bộ eval riêng và regression base:
+
+```powershell
+cd starter_v0
+python run_eval.py --provider openai --version v3_bonus --suite extension --eval-cases data/eval_bonus.json
+python run_eval.py --provider openai --version v3_bonus --suite base --eval-cases data/eval_base.json
+```
+
+Evidence và giới hạn đã biết được ghi trong `starter_v0/analysis/bonus_tools.md`.
+
 ## Tài liệu cần đọc
 
 | File | Dùng khi |

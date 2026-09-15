@@ -1,0 +1,475 @@
+{
+  "run_id": "v3_bonus_B_extension_openai_20260915T195530474118",
+  "version": "v3_bonus",
+  "artifact_version": "v3_bonus+pd0ce0d8719ee+t3896d84f4932",
+  "prompt_hash": "d0ce0d8719ee5faf6c5d1cd30527a45d1f5e0ded05680e68dcdf93e0ff820b89",
+  "tools_hash": "3896d84f4932231e60f4cac323f56a495a9a2d4c82db4125e7cbc30d0285e9e5",
+  "phase": "B",
+  "suite": "extension",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "E:\\QUY\\Vin-AI\\K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "E:\\QUY\\Vin-AI\\K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_bonus.json",
+  "dataset_id": "day04_team_bonus_tools_v1",
+  "dataset_role": "extension",
+  "description": "Team-authored routing cases for three read-only bonus Helpdesk tools.",
+  "generated_at": "2026-09-15T19:55:30",
+  "summary": {
+    "total_cases": 6,
+    "measured_cases": 6,
+    "provider_error_cases": 0,
+    "passed_cases": 5,
+    "case_accuracy": 0.8333,
+    "tool_routing_accuracy": 0.8333,
+    "argument_accuracy": 0.8333,
+    "multiturn_accuracy": null,
+    "failure_counts": {
+      "missing_info": 1
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "B01_software_approved",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "software_approval",
+        "difficulty": "medium",
+        "what_it_tests": "Route a complete software approval request to the local catalog."
+      },
+      "input": "Cisco Secure Client 5.2.1 có được phê duyệt cho Windows 11 không?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_software_approval",
+            "args": {
+              "software_name": "Cisco Secure Client",
+              "version": "5.2.1",
+              "operating_system": "Windows 11"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_software_approval",
+            "args": {
+              "software_name": "Cisco Secure Client",
+              "version": "5.2.1",
+              "operating_system": "Windows 11"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_software_approval",
+          "args": {
+            "software_name": "Cisco Secure Client",
+            "version": "5.2.1",
+            "operating_system": "Windows 11"
+          },
+          "result": {
+            "tool": "check_software_approval",
+            "status": "approved",
+            "matched_product": "Cisco Secure Client",
+            "requested_version": "5.2.1",
+            "approved_versions": [
+              "5.2.1"
+            ],
+            "operating_system": "Windows 11",
+            "recommendation": "No version change is required.",
+            "catalog_version": "2026.09",
+            "snapshot_at": "2026-09-15T09:00:00+07:00",
+            "source": "mock_approved_software_catalog"
+          }
+        }
+      ]
+    },
+    {
+      "id": "B02_ticket_status",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "ticket_lookup",
+        "difficulty": "easy",
+        "what_it_tests": "Read an existing ticket without calling the create action."
+      },
+      "input": "Kiểm tra trạng thái ticket LAB-1002 giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_ticket_status",
+            "args": {
+              "ticket_id": "LAB-1002"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup_ticket_status",
+            "args": {
+              "ticket_id": "LAB-1002"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup_ticket_status",
+          "args": {
+            "ticket_id": "LAB-1002"
+          },
+          "result": {
+            "tool": "lookup_ticket_status",
+            "ticket": {
+              "ticket_id": "LAB-1002",
+              "summary": "Wi-Fi driver update for LT-240",
+              "status": "open",
+              "priority": "medium",
+              "asset_id": "LT-240",
+              "assigned_team": "Endpoint Support",
+              "updated_at": "2026-09-15T08:20:00+07:00",
+              "next_action": "Schedule the approved driver update with the user."
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00",
+            "source": "mock_ticket_status_store"
+          }
+        }
+      ]
+    },
+    {
+      "id": "B03_maintenance_window",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "maintenance_lookup",
+        "difficulty": "easy",
+        "what_it_tests": "Distinguish planned maintenance from current service health."
+      },
+      "input": "Cho mình xem lịch bảo trì VPN production sắp tới.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_maintenance_window",
+            "args": {
+              "service": "vpn",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_maintenance_window",
+            "args": {
+              "service": "vpn",
+              "environment": "production"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_maintenance_window",
+          "args": {
+            "service": "vpn",
+            "environment": "production"
+          },
+          "result": {
+            "tool": "check_maintenance_window",
+            "service": "vpn",
+            "environment": "production",
+            "status": "planned",
+            "windows": [
+              {
+                "window_id": "MW-201",
+                "service": "vpn",
+                "environment": "production",
+                "start_at": "2026-09-18T22:00:00+07:00",
+                "end_at": "2026-09-18T23:00:00+07:00",
+                "impact": "New VPN sessions may fail for up to five minutes during gateway rotation.",
+                "status": "planned"
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00",
+            "timezone": "Asia/Ho_Chi_Minh",
+            "source": "mock_maintenance_calendar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "B04_missing_ticket_id",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "ticket_clarification",
+        "difficulty": "medium",
+        "what_it_tests": "Ask for an exact ticket ID rather than inventing one."
+      },
+      "input": "Kiểm tra trạng thái ticket của mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Vui lòng cung cấp ID ticket của bạn để tôi có thể kiểm tra trạng thái.",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Vui lòng cung cấp ID ticket của bạn để tôi có thể kiểm tra trạng thái.",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Vui lòng cung cấp ID ticket của bạn để tôi có thể kiểm tra trạng thái.",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "B05_ticket_and_maintenance",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "parallel_bonus_tools",
+        "difficulty": "hard",
+        "what_it_tests": "Call two independent read-only extension tools."
+      },
+      "input": "Tra cứu ticket LAB-1001 và lịch bảo trì VPN production.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_ticket_status",
+            "args": {
+              "ticket_id": "LAB-1001"
+            }
+          },
+          {
+            "name": "check_maintenance_window",
+            "args": {
+              "service": "vpn",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup_ticket_status",
+            "args": {
+              "ticket_id": "LAB-1001"
+            }
+          },
+          {
+            "name": "check_maintenance_window",
+            "args": {
+              "service": "vpn",
+              "environment": "production"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup_ticket_status",
+          "args": {
+            "ticket_id": "LAB-1001"
+          },
+          "result": {
+            "tool": "lookup_ticket_status",
+            "ticket": {
+              "ticket_id": "LAB-1001",
+              "summary": "VPN authentication timeout on LT-204",
+              "status": "in_progress",
+              "priority": "high",
+              "asset_id": "LT-204",
+              "assigned_team": "Network Operations",
+              "updated_at": "2026-09-15T08:45:00+07:00",
+              "next_action": "Monitor incident INC-1042 and confirm client recovery."
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00",
+            "source": "mock_ticket_status_store"
+          }
+        },
+        {
+          "tool": "check_maintenance_window",
+          "args": {
+            "service": "vpn",
+            "environment": "production"
+          },
+          "result": {
+            "tool": "check_maintenance_window",
+            "service": "vpn",
+            "environment": "production",
+            "status": "planned",
+            "windows": [
+              {
+                "window_id": "MW-201",
+                "service": "vpn",
+                "environment": "production",
+                "start_at": "2026-09-18T22:00:00+07:00",
+                "end_at": "2026-09-18T23:00:00+07:00",
+                "impact": "New VPN sessions may fail for up to five minutes during gateway rotation.",
+                "status": "planned"
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00",
+            "timezone": "Asia/Ho_Chi_Minh",
+            "source": "mock_maintenance_calendar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "B06_missing_software_os",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "software_clarification",
+        "difficulty": "medium",
+        "what_it_tests": "Ask for the operating system before catalog lookup."
+      },
+      "input": "Outlook 16.89 có được phê duyệt không?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "check_software_approval",
+            "args": {
+              "software_name": "Outlook",
+              "version": "16.89",
+              "operating_system": "Windows 11"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call check_software_approval"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "check_software_approval",
+          "args": {
+            "software_name": "Outlook",
+            "version": "16.89",
+            "operating_system": "Windows 11"
+          },
+          "result": {
+            "tool": "check_software_approval",
+            "status": "not_approved",
+            "matched_product": "Microsoft Outlook",
+            "requested_version": "16.89",
+            "approved_versions": [
+              "2408",
+              "2409"
+            ],
+            "operating_system": "Windows 11",
+            "recommendation": "Use an approved version from the managed software catalog.",
+            "catalog_version": "2026.09",
+            "snapshot_at": "2026-09-15T09:00:00+07:00",
+            "source": "mock_approved_software_catalog"
+          }
+        }
+      ]
+    }
+  ]
+}

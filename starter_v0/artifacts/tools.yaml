@@ -105,3 +105,31 @@ tools:
         asset_id: {type: string, default: "", description: "Exact asset ID if the ticket is about a device."}
         confirmed: {type: boolean, default: false, description: "Set true only when the user explicitly confirmed this exact current ticket payload."}
       required: [summary]
+
+  # ---------------- Team-built bonus tools ----------------
+  - name: check_software_approval
+    description: "Check whether a specific software version is approved for a fictional managed operating system. This read-only tool does not install or update software. Require software_name, version, and operating_system; use clarify when any field is missing."
+    parameters:
+      type: object
+      properties:
+        software_name: {type: string, description: "Public software product name such as Cisco Secure Client or Outlook."}
+        version: {type: string, description: "Exact software version to check."}
+        operating_system: {type: string, description: "Operating system and version such as Windows 11 or macOS 15."}
+      required: [software_name, version, operating_system]
+
+  - name: lookup_ticket_status
+    description: "Read the status of one fictional support ticket by exact ticket ID. Do not use this tool to create or modify tickets; use clarify when the ticket ID is missing."
+    parameters:
+      type: object
+      properties:
+        ticket_id: {type: string, description: "Exact fictional ticket ID such as LAB-1002."}
+      required: [ticket_id]
+
+  - name: check_maintenance_window
+    description: "Look up planned maintenance for a fictional shared service and environment. This differs from current health in check_service_status. Do not guess the environment; use clarify when it is ambiguous."
+    parameters:
+      type: object
+      properties:
+        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Shared service name."}
+        environment: {type: string, enum: [production, staging], description: "Environment whose maintenance schedule is requested."}
+      required: [service, environment]

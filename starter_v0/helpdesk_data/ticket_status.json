@@ -1,0 +1,35 @@
+{
+  "snapshot_at": "2026-09-15T09:00:00+07:00",
+  "tickets": [
+    {
+      "ticket_id": "LAB-1001",
+      "summary": "VPN authentication timeout on LT-204",
+      "status": "in_progress",
+      "priority": "high",
+      "asset_id": "LT-204",
+      "assigned_team": "Network Operations",
+      "updated_at": "2026-09-15T08:45:00+07:00",
+      "next_action": "Monitor incident INC-1042 and confirm client recovery."
+    },
+    {
+      "ticket_id": "LAB-1002",
+      "summary": "Wi-Fi driver update for LT-240",
+      "status": "open",
+      "priority": "medium",
+      "asset_id": "LT-240",
+      "assigned_team": "Endpoint Support",
+      "updated_at": "2026-09-15T08:20:00+07:00",
+      "next_action": "Schedule the approved driver update with the user."
+    },
+    {
+      "ticket_id": "LAB-1003",
+      "summary": "Meeting room microphone cable check",
+      "status": "resolved",
+      "priority": "low",
+      "asset_id": "RM-12A",
+      "assigned_team": "Workplace Technology",
+      "updated_at": "2026-09-14T16:30:00+07:00",
+      "next_action": "No action required; verify during the next room inspection."
+    }
+  ]
+}

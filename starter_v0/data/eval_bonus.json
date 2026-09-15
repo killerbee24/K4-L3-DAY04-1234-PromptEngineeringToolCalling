@@ -1,0 +1,135 @@
+{
+  "dataset_id": "day04_team_bonus_tools_v1",
+  "dataset_role": "extension",
+  "description": "Team-authored routing cases for three read-only bonus Helpdesk tools.",
+  "cases": [
+    {
+      "id": "B01_software_approved",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Cisco Secure Client 5.2.1 có được phê duyệt cho Windows 11 không?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_software_approval",
+            "args": {
+              "software_name": "Cisco Secure Client",
+              "version": "5.2.1",
+              "operating_system": "Windows 11"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "software_approval",
+        "difficulty": "medium",
+        "what_it_tests": "Route a complete software approval request to the local catalog."
+      }
+    },
+    {
+      "id": "B02_ticket_status",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Kiểm tra trạng thái ticket LAB-1002 giúp mình.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_ticket_status",
+            "args": {"ticket_id": "LAB-1002"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ticket_lookup",
+        "difficulty": "easy",
+        "what_it_tests": "Read an existing ticket without calling the create action."
+      }
+    },
+    {
+      "id": "B03_maintenance_window",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Cho mình xem lịch bảo trì VPN production sắp tới.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_maintenance_window",
+            "args": {"service": "vpn", "environment": "production"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "maintenance_lookup",
+        "difficulty": "easy",
+        "what_it_tests": "Distinguish planned maintenance from current service health."
+      }
+    },
+    {
+      "id": "B04_missing_ticket_id",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Kiểm tra trạng thái ticket của mình.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {"response_type": "text"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ticket_clarification",
+        "difficulty": "medium",
+        "what_it_tests": "Ask for an exact ticket ID rather than inventing one."
+      }
+    },
+    {
+      "id": "B05_ticket_and_maintenance",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Tra cứu ticket LAB-1001 và lịch bảo trì VPN production.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_ticket_status",
+            "args": {"ticket_id": "LAB-1001"}
+          },
+          {
+            "name": "check_maintenance_window",
+            "args": {"service": "vpn", "environment": "production"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "parallel_bonus_tools",
+        "difficulty": "hard",
+        "what_it_tests": "Call two independent read-only extension tools."
+      }
+    },
+    {
+      "id": "B06_missing_software_os",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Outlook 16.89 có được phê duyệt không?",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {"response_type": "text"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "software_clarification",
+        "difficulty": "medium",
+        "what_it_tests": "Ask for the operating system before catalog lookup."
+      }
+    }
+  ]
+}
