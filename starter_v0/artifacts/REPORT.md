@@ -9,7 +9,7 @@
 
 - Team: Day04 K4-L3B.
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members: Đinh Văn Bình; Phạm Xuân Quý.
+- Members: Vũ Văn Diện; Đinh Văn Bình; Phạm Xuân Quý, Ngô Đinh Minh Nhật.
 - Provider/model: OpenAI `gpt-4o-mini` cho evidence bonus/backend; OpenRouter `gpt-4o-mini` cho base v3 evidence.
 
 # PHẦN A — Giới thiệu agent
@@ -78,16 +78,16 @@ Liệt kê đúng 10 case tự viết: 5 single-turn và 5 multi-turn.
 
 | Case ID | What it tests | Expected behavior | Result |
 |---|---|---|---|
-| G01_wifi_kb_routing | Routes a Windows Wi-Fi issue | `search_kb`, category `wifi` | Pending v3 run |
-| G02_staging_vpn_status | Preserves explicit environment | `check_service_status`, `vpn`, `staging` | Pending v3 run |
-| G03_device_security_check | Uses supplied asset and check | `inspect_device`, `LT-204`, `security` | Pending v3 run |
-| G04_employee_directory_lookup | Routes directory lookup | `lookup_user`, `EMP-1042` | Pending v3 run |
-| G05_capability_question_no_tool | Avoids unnecessary tools | No tool call | Pending v3 run |
-| G06_vpn_context_to_kb | Uses multi-turn VPN context | `search_kb`, category `vpn` | Pending v3 run |
-| G07_ambiguous_service_clarification | Does not guess a service | `clarify`, response type `choice` | Pending v3 run |
-| G08_confirm_ticket_creation | Requires explicit confirmation | `create_ticket`, `confirmed: true` | Pending v3 run |
-| G09_cancel_ticket_request | Honors cancellation | No tool call | Pending v3 run |
-| G10_missing_asset_clarification | Does not invent an asset ID | `clarify`, response type `text` | Pending v3 run |
+| G01_wifi_kb_routing | Routes a Windows Wi-Fi issue | `search_kb`, category `wifi` | Blocked: missing `OPENAI_API_KEY` |
+| G02_staging_vpn_status | Preserves explicit environment | `check_service_status`, `vpn`, `staging` | Blocked: missing `OPENAI_API_KEY` |
+| G03_device_security_check | Uses supplied asset and check | `inspect_device`, `LT-204`, `security` | Blocked: missing `OPENAI_API_KEY` |
+| G04_employee_directory_lookup | Routes directory lookup | `lookup_user`, `EMP-1042` | Blocked: missing `OPENAI_API_KEY` |
+| G05_capability_question_no_tool | Avoids unnecessary tools | No tool call | Blocked: missing `OPENAI_API_KEY` |
+| G06_vpn_context_to_kb | Uses multi-turn VPN context | `search_kb`, category `vpn` | Blocked: missing `OPENAI_API_KEY` |
+| G07_ambiguous_service_clarification | Does not guess a service | `clarify`, response type `choice` | Blocked: missing `OPENAI_API_KEY` |
+| G08_confirm_ticket_creation | Requires explicit confirmation | `create_ticket`, `confirmed: true` | Blocked: missing `OPENAI_API_KEY` |
+| G09_cancel_ticket_request | Honors cancellation | No tool call | Blocked: missing `OPENAI_API_KEY` |
+| G10_missing_asset_clarification | Does not invent an asset ID | `clarify`, response type `text` | Blocked: missing `OPENAI_API_KEY` |
 
 ## B4. Live chat evidence
 
@@ -136,7 +136,7 @@ Trạng thái: chưa thể đánh dấu hoàn tất safety review vì repository
 
 ### Evidence gap
 
-Chưa có run group 10 case hoặc run adversarial 12 case trong repository. Vì vậy kết quả B3 vẫn là `Pending v3 run` và B4a/B6 chưa được kết luận cuối.
+Đã thử chạy group tại `runs/v3_B_group_openai_20260915T201547535615.json`, nhưng run không hợp lệ vì `provider_error_cases=10` và `measured_cases=0` (`OPENAI_API_KEY` bị thiếu). Chưa chạy adversarial vì cùng blocker; B4a/B6 chưa được kết luận cuối.
 
 # PHẦN C — Checkout trước khi nộp
 
