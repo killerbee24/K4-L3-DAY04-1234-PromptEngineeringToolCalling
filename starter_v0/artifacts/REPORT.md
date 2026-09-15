@@ -1,22 +1,22 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
-- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
-- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
+- Lĩnh vực tự chọn: IT Helpdesk Agent.
+- Nhiệm vụ và luồng cơ bản đã chốt trước v0: định tuyến yêu cầu hỗ trợ tới KB, kiểm tra dịch vụ/thiết bị/người dùng, hỏi lại thông tin thiếu và chỉ tạo ticket sau xác nhận.
+- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0: `starter_v0/data/eval_base.json`, `starter_v0/data/eval_adversarial.json`.
+- Chức năng mở rộng ngoài luồng cơ bản: ba tool read-only kiểm tra phần mềm, trạng thái ticket và lịch bảo trì.
 
 ## Team
 
-- Team:
+- Team: Day04 K4-L3B.
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members:
-- Provider/model:
+- Members: Đinh Văn Bình; Phạm Xuân Quý.
+- Provider/model: OpenAI `gpt-4o-mini` cho evidence bonus/backend; OpenRouter `gpt-4o-mini` cho base v3 evidence.
 
 # PHẦN A — Giới thiệu agent
 
 ## A1. Agent này làm được gì
 
-> Viết 1–2 câu mô tả capability và giới hạn của agent.
+Trợ lý hỗ trợ các yêu cầu IT bằng cách tìm hướng dẫn, kiểm tra dịch vụ hoặc thiết bị, tra cứu dữ liệu giả lập và tạo ticket sau khi người dùng xác nhận. Agent không được tự đoán mã tài sản/mã nhân viên, không xử lý dữ liệu thật và không thực hiện thao tác cài đặt hoặc thay đổi hệ thống.
 
 **Link dùng thử:**
 
@@ -38,15 +38,15 @@
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. Kiểm tra trạng thái VPN production và tìm hướng dẫn xử lý.
+2. Kiểm tra chẩn đoán VPN cho một thiết bị có asset ID.
+3. Kiểm tra phần mềm có được phê duyệt cho một hệ điều hành hay không.
 
 ## A4. Kịch bản demo đã rehearse
 
 | Scenario | Tool trace cần thấy | Cải thiện version | Fallback run/transcript |
 |---|---|---|---|
-|  |  |  |  |
+| VPN multi-tool check | `inspect_device`, `check_service_status`, `search_kb` với args tương ứng | v3 | `transcripts/v3_openai_20260915T191233779529.transcript.json` |
 
 # PHẦN B — Chi tiết và evidence
 
@@ -93,7 +93,7 @@ Liệt kê đúng 10 case tự viết: 5 single-turn và 5 multi-turn.
 
 | Scenario/turn | Version | Tool calls + args | Transcript/run | Outcome |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| VPN diagnostic + service + KB lookup | v3 | `inspect_device(asset_id=LT-318, check=vpn)`; `check_service_status(service=vpn, environment=production)`; `search_kb(query=VPN, category=vpn)` | `transcripts/v3_openai_20260915T191233779529.transcript.json` | Answered; tool results and final response recorded. |
 
 ## B4a. Adversarial evidence
 
@@ -102,7 +102,7 @@ liệu bị ghi hoặc gửi ra ngoài; cần kiểm tra cả `tool_results` và
 
 | Attack case | Expected boundary | Actual calls | Sensitive write/exfiltration occurred? | Outcome |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| Pending adversarial run | Must be checked against the 12-case adversarial dataset | No valid adversarial run is present in the repository | Not yet verified | Blocked until a valid adversarial run and filesystem review are available. |
 
 ## B5. Optional và bonus tool evidence
 
@@ -113,9 +113,9 @@ nhóm tự xây.
 
 | Category | Evidence file | What worked | Risk / guardrail |
 |---|---|---|---|
-| Optional built-in |  |  |  |
-| External search + privacy boundary |  |  |  |
-| Bonus: tool mới do nhóm tự xây |  |  |  |
+| Optional built-in | `runs/v3_bonus_B_base_openai_20260915T195623114865.json` | Base regression: 30/30 PASS, provider errors 0, measured 30/30. | Keep write actions behind confirmation. |
+| External search + privacy boundary | `starter_v0/artifacts/tools.yaml` | `search_device_info` declaration limits input to public manufacturer/model data. | Never send asset ID, employee ID or internal diagnostics externally. |
+| Bonus: tool mới do nhóm tự xây | `analysis/bonus_tools.md`, `runs/v3_bonus_B_extension_openai_20260915T195530474118.json` | Three read-only local tools; 5/6 PASS, provider errors 0, measured 6/6. | `B06_missing_software_os` shows missing OS must trigger clarify instead of guessing. |
 
 ## B6. Safety review
 
@@ -125,12 +125,18 @@ nhóm tự xây.
 - [ ] Tool result error đã được review thủ công; ghi case ID, result và kết luận ở B4a.
 - [ ] Không có file ticket hoặc side effect ngoài dự kiến sau khi chạy adversarial cases.
 
+Trạng thái: chưa thể đánh dấu hoàn tất safety review vì repository hiện chưa có run adversarial hợp lệ và chưa có filesystem review tương ứng.
+
 ## B7. Technical reflection
 
-- Fix nào thuộc `system_prompt.md`?
-- Fix nào thuộc `tools.yaml`?
-- Failure nào không thể chỉ nhìn automatic score?
-- Nếu có thêm một vòng, nhóm sẽ thử hypothesis nào?
+- Fix thuộc `system_prompt.md`: latest-intent-wins, không đoán ID/môi trường, hỏi xác nhận trước write action và không gửi dữ liệu nội bộ ra external search.
+- Fix thuộc `tools.yaml`: mô tả rõ routing, enum argument, prerequisite và giới hạn dữ liệu của từng tool.
+- Failure không thể chỉ nhìn automatic score: tool result error, dữ liệu nhạy cảm trong trace/ticket và side effect trên filesystem.
+- Nếu có thêm một vòng: chạy group/adversarial bằng cùng artifact v3, sau đó bổ sung hypothesis riêng cho lỗi thiếu hệ điều hành ở `B06_missing_software_os`.
+
+### Evidence gap
+
+Chưa có run group 10 case hoặc run adversarial 12 case trong repository. Vì vậy kết quả B3 vẫn là `Pending v3 run` và B4a/B6 chưa được kết luận cuối.
 
 # PHẦN C — Checkout trước khi nộp
 

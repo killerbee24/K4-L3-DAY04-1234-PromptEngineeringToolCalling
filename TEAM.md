@@ -14,7 +14,7 @@
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| Đinh Văn Bình | Chưa bổ sung | Chưa bổ sung | Evaluation, Safety & Report: viết eval group, chuẩn bị report, phân tích adversarial và kiểm tra safety | `starter_v0/data/eval_group.json`, `starter_v0/artifacts/REPORT.md`; commit `fb17324` |
+| Đinh Văn Bình | 2A202602830 | Chưa bổ sung | Evaluation, Safety & Report: viết eval group, chuẩn bị report, phân tích adversarial và kiểm tra safety | `starter_v0/data/eval_group.json`, `starter_v0/artifacts/REPORT.md`; commit `fb17324` |
 
 ## Nhận xét chung
 
