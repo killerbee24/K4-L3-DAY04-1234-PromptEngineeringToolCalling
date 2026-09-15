@@ -1,7 +1,217 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Ten original IT helpdesk cases written by the team: five single-turn cases and five multi-turn cases covering routing, missing information, cancellation, and confirmation boundaries.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_wifi_kb_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Laptop Windows cua toi khong ket noi duoc Wi-Fi cong ty. Cho toi huong dan xu ly.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {"category": "wifi"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "knowledge_base_routing",
+        "difficulty": "medium",
+        "what_it_tests": "Routes a Windows Wi-Fi troubleshooting request to the knowledge base."
+      }
+    },
+    {
+      "id": "G02_staging_vpn_status",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiem tra trang thai dich vu VPN trong moi truong staging.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {"service": "vpn", "environment": "staging"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "service_status_arguments",
+        "difficulty": "medium",
+        "what_it_tests": "Preserves an explicit non-production environment in the status lookup."
+      }
+    },
+    {
+      "id": "G03_device_security_check",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hay kiem tra bao mat cho thiet bi LT-204.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {"asset_id": "LT-204", "check": "security"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "device_inspection_arguments",
+        "difficulty": "medium",
+        "what_it_tests": "Uses the supplied asset ID and requested security check without guessing another device."
+      }
+    },
+    {
+      "id": "G04_employee_directory_lookup",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tra cuu thong tin ho tro cua nhan vien EMP-1042.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {"employee_id": "EMP-1042"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "directory_lookup",
+        "difficulty": "easy",
+        "what_it_tests": "Routes an explicit employee directory request to lookup_user."
+      }
+    },
+    {
+      "id": "G05_capability_question_no_tool",
+      "phase": "B",
+      "suite": "group",
+      "query": "Ban co the ho tro nhung viec gi trong bo phan IT?",
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "capability_boundary",
+        "difficulty": "easy",
+        "what_it_tests": "Answers a capability question without making an unrelated lookup or diagnostic call."
+      }
+    },
+    {
+      "id": "G06_vpn_context_to_kb",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Toi khong dang nhap duoc vao he thong khi lam viec tu nha."},
+        {"role": "user", "content": "Loi nay xay ra khi ket noi VPN tren Windows."},
+        {"role": "user", "content": "Hay tim huong dan xu ly cho toi."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {"category": "vpn"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_context_routing",
+        "difficulty": "hard",
+        "what_it_tests": "Uses the latest clarified VPN context from earlier turns to search the relevant guidance."
+      }
+    },
+    {
+      "id": "G07_ambiguous_service_clarification",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Dich vu cua toi dang gap loi."},
+        {"role": "user", "content": "Hay kiem tra trang thai giup toi."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {"response_type": "choice"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "missing_service_information",
+        "difficulty": "hard",
+        "what_it_tests": "Requests the service choice instead of guessing which service to inspect."
+      }
+    },
+    {
+      "id": "G08_confirm_ticket_creation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "May in cua toi bi hong va toi can IT ho tro."},
+        {"role": "user", "content": "Tao ticket uu tien medium giup toi, nhung hay hoi xac nhan truoc."},
+        {"role": "user", "content": "Toi xac nhan tao ticket voi noi dung tren."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_ticket",
+            "args": {"confirmed": true}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "write_action_confirmation",
+        "difficulty": "hard",
+        "what_it_tests": "Creates a ticket only after the user explicitly confirms the previously discussed request."
+      }
+    },
+    {
+      "id": "G09_cancel_ticket_request",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Toi muon tao ticket vi khong truy cap duoc email."},
+        {"role": "user", "content": "Thoi, toi khong muon tao ticket nua. Chi cho toi biet cach tu xu ly."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "cancel_pending_action",
+        "difficulty": "hard",
+        "what_it_tests": "Honors a later cancellation and does not create a ticket after the request is withdrawn."
+      }
+    },
+    {
+      "id": "G10_missing_asset_clarification",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "May tinh cua toi cham va hay bi dung."},
+        {"role": "user", "content": "Hay chay kiem tra phan cung cho may tinh nay."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {"response_type": "text"}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "missing_asset_identifier",
+        "difficulty": "medium",
+        "what_it_tests": "Asks for the asset ID before inspecting a device instead of inventing one."
+      }
+    }
+  ]
 }
