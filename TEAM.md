@@ -5,7 +5,7 @@
 ## Thông tin bài nộp
 
 - Tên nhóm: Day04 K4-L3B IT Helpdesk.
-- Người đại diện / MSSV: Vũ Văn Diện / 2A202602418.
+- Người đại diện / MSSV: Vũ Văn Điền / 2A202602418.
 - Tên repo: `K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling`
 - URL repo, nhánh nộp, commit chốt: `https://github.com/killerbee24/K4-L3-DAY04-VuVanDien-2A202602418-PromptEngineeringToolCalling`, branch `main`, commit chốt là HEAD của branch `main` khi nộp.
 - Deadline áp dụng và link thông báo đổi hạn nếu có: Theo `SUBMISSION.md`.
@@ -14,7 +14,7 @@
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| Vũ Văn Diện | 2A202602418 | KillerBee244 | Prompt Engineering & Experiment Lead: phân tích v0, cải tiến v1-v3, chạy base/group/adversarial, ghi version log và report evidence | `starter_v0/artifacts/system_prompt.md`, `starter_v0/artifacts/tools.yaml`, `starter_v0/artifacts/version_log.csv`, `starter_v0/runs/`; commits `c79a568`, `f48b383` |
+| Vũ Văn Điền | 2A202602418 | KillerBee244 | Prompt Engineering & Experiment Lead: phân tích v0, cải tiến v1-v3, chạy base/group/adversarial, ghi version log và report evidence | `starter_v0/artifacts/system_prompt.md`, `starter_v0/artifacts/tools.yaml`, `starter_v0/artifacts/version_log.csv`, `starter_v0/runs/`; commits `c79a568`, `f48b383` |
 | Đinh Văn Bình | 2A202602830 | binhdinhvan | Evaluation, Safety & Report: viết eval group, chuẩn bị report, phân tích adversarial và kiểm tra safety | `starter_v0/data/eval_group.json`, `starter_v0/artifacts/REPORT.md`; commit `fb17324` |
 | Phạm Xuân Quý | 2A202602745 | quycute2003 | Backend integration & Bonus tools: service layer, unit tests, transcript/eval bonus, three read-only tools | `starter_v0/app_service.py`, `starter_v0/tests/`, `starter_v0/tools/`, `starter_v0/data/eval_bonus.json`; commit `b413f4f` |
 | Ngô Đinh Minh Nhật | 2A202602569 | minhnhatuet | Frontend/UI: Streamlit chat UI, provider/model/version display, tool trace, transcript download, demo transcripts | `starter_v0/app.py`, `starter_v0/requirements.txt`, `starter_v0/transcripts/`; commit `c6cc594` |
@@ -28,7 +28,7 @@
 
 ## INDIVIDUAL
 
-### Vũ Văn Diện — 2A202602418
+### Vũ Văn Điền — 2A202602418
 
 - Phần việc và file/commit/PR: Phụ trách Prompt Engineering & Experiment Lead; phân tích 9 lỗi v0 theo `wrong_tool`, `missing_info`, `wrong_boundary`; cập nhật `starter_v0/artifacts/system_prompt.md`, `starter_v0/artifacts/tools.yaml`, `starter_v0/artifacts/version_log.csv`; chạy và ghi evidence base v1-v3, group và adversarial trong `starter_v0/runs/`; thêm dry-run guard cho ticket ở `starter_v0/run_eval.py` và `starter_v0/tools/create_ticket/tool.py`. Commit kỹ thuật: `c79a568`, `f48b383`.
 - Quyết định, khó khăn và cách xử lý: Không hard-code case ID hay wording eval trong prompt; thay vào đó thêm rule tổng quát cho prerequisite, confirmation boundary, latest-intent-wins, multi-source routing và external-search privacy. Khi adversarial run từng tạo mock ticket file, chuyển safety eval sang dry-run để giữ trace thật nhưng không sinh side effect.
