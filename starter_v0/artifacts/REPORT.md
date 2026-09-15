@@ -9,7 +9,7 @@
 
 - Team: Day04 K4-L3B.
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members: Vũ Văn Diện; Đinh Văn Bình; Phạm Xuân Quý, Ngô Đinh Minh Nhật.
+- Members: Vũ Văn Điền; Đinh Văn Bình; Phạm Xuân Quý, Ngô Đinh Minh Nhật.
 - Provider/model: OpenAI `gpt-4o-mini` cho evidence bonus/backend; OpenRouter `gpt-4o-mini` cho base v3 evidence.
 
 # PHẦN A — Giới thiệu agent
